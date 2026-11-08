@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ZYLO helps you discover products and shop smarter.">
+  <title>ZYLO — The Future Cart</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="ZYLO home">
+      <img src="assets/zylo-logo-purple.png" alt="ZYLO Logo" style="height: 50px; border-radius: 8px; margin-right: 10px;">
+      <span><strong>ZYLO</strong><small>The Future Cart</small></span>
+    </a>
+    <nav aria-label="Main navigation">
+  <a href="#categories">Categories</a>
+  <a href="#discover">Discover</a>
+  <a href="#assistant">AI Assistant</a>
+  <button id="theme-toggle" style="background: none; border: none; font-size: 18px; cursor: pointer; padding: 0 10px;" title="Change Theme">🌙</button>
+</nav>
+    <label class="search"><span aria-hidden="true">⌕</span><input id="searchInput" type="search" placeholder="Search products…" aria-label="Search products"></label>
+  </header>
+
+  <main>
+    <section class="hero" style="display: flex; align-items: center; justify-content: space-between; overflow: hidden; border-radius: 24px; padding: 30px; margin-bottom: 40px; box-sizing: border-box; background: linear-gradient(135deg, #efe5fd 0%, #d8b4fe 100%);">
+      <div class="hero-copy">
+  <h1>Discover smarter<br>shopping with Zylo</h1>
+  <p>Find products that fit your needs and budget.</p>
+  <a class="button" href="#discover" style="background-color: #6a1b9a; color: white; border-radius: 20px; padding: 10px 20px;">Shop Now &rarr;</a>
+  
+  <div style="display: flex; gap: 20px; margin-top: 30px; font-weight: bold; font-size: 0.9em; z-index: 2; position: relative;">
+    <span>⚡ Smart Recommendations</span>
+    <span>✔️ Trusted Shopping</span>
+    <span>🚚 Fast Delivery</span>
+  </div>
+</div>
+      <div class="hero-art" style="flex: 1; display: flex; justify-content: flex-end; align-items: center; overflow: hidden; margin: 0; padding: 0;">
+  <img src="assets/banner home page.png" alt="Zylo Shopping Banner" style="width: 100%; max-width: 580px; height: auto; border-radius: 24px; object-fit: cover; display: block; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.15)); margin: 0; border: none;">
+</div>
+    </section>
+
+    <section id="categories" class="section">
+      <div class="section-heading"><div><p class="eyebrow">BROWSE YOUR WAY</p><h2>Explore categories</h2></div></div>
+      <div id="categoryList" class="category-list">
+        <button class="category active" data-category="All">✦ <span>All</span></button>
+        <button class="category" data-category="Fashion">◇ <span>Fashion</span></button>
+        <button class="category" data-category="Home & Kitchen">⌂ <span>Home & Kitchen</span></button>
+        <button class="category" data-category="Beauty">✿ <span>Beauty</span></button>
+        <button class="category" data-category="Electronics">◉ <span>Electronics</span></button>
+        <button class="category" data-category="Kids & Toys">♡ <span>Kids & Toys</span></button>
+      </div>
+    </section>
+
+    <section id="assistant" class="assistant section">
+      <div class="assistant-icon">✧</div>
+      <div class="assistant-copy"><p class="eyebrow">YOUR SMART SHOPPING COMPANION</p><h2>What are you looking for?</h2><p>Try a category or a budget, and ZYLO will filter the demo catalogue.</p></div>
+      <form id="assistantForm" class="assistant-form">
+        <input id="assistantInput" type="text" placeholder="e.g. kitchen products under ₹500" aria-label="Describe what you need">
+        <button class="button" type="submit">Find</button>
+      </form>
+      <p id="assistantMessage" class="assistant-message" aria-live="polite">Demo assistant — no AI API connected yet.</p>
+    </section>
+
+    <section id="discover" class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">HANDPICKED FOR DISCOVERY</p><h2>Popular finds</h2></div>
+        <span id="resultCount" class="result-count"></span>
+      </div>
+      <div id="productGrid" class="product-grid"></div>
+      <p id="emptyState" class="empty hidden">No demo products match that search. Try another category or keyword.</p>
+    </section>
+
+    <section class="note section">
+      <strong>Shopping transparently</strong>
+      <p>Some product links on ZYLO may be affiliate links. If you buy through an eligible link, ZYLO may earn a commission at no extra cost to you. Product prices and availability can change on the retailer’s website.</p>
+    </section>
+  </main>
+
+  <footer><a class="footer-brand" href="#">ZYLO</a><span>Shop Smarter. Live Better.</span><a href="mailto:hello@example.com">Contact</a><span>© <span id="year"></span> ZYLO · Demo prototype</span></footer>
+  <script src="products.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
