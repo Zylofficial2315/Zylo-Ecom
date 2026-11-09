@@ -1,11 +1,49 @@
-// Demo catalogue only. Replace with products and links you are authorised to promote.
-const products = [
-  {id:1,name:"Everyday Tote Bag",category:"Fashion",price:749,emoji:"👜",description:"A simple everyday carry-all. Demo listing."},
-  {id:2,name:"Soft Cushion Set",category:"Home & Kitchen",price:399,emoji:"🛋️",description:"A cosy home accent. Demo listing."},
-  {id:3,name:"Reusable Water Bottle",category:"Home & Kitchen",price:299,emoji:"🧴",description:"A practical everyday essential. Demo listing."},
-  {id:4,name:"Wireless Headphones",category:"Electronics",price:999,emoji:"🎧",description:"Audio accessory example. Demo listing."},
-  {id:5,name:"Gentle Skincare Kit",category:"Beauty",price:499,emoji:"🧴",description:"A sample personal-care listing. Demo listing."},
-  {id:6,name:"Soft Plush Bear",category:"Kids & Toys",price:599,emoji:"🧸",description:"A gift idea example. Demo listing."},
-  {id:7,name:"Classic T-shirt",category:"Fashion",price:449,emoji:"👕",description:"A wardrobe basic. Demo listing."},
-  {id:8,name:"Desk Organiser",category:"Home & Kitchen",price:349,emoji:"🗂️",description:"Keep small essentials together. Demo listing."}
-];
+// products.js
+
+// 1. Inga unga Google Sheet CSV link-a paste pannunga
+const sheetUrl = "[https://docs.google.com/spreadsheets/d/e/2PACX-abcde12345/pub?output=csv](https://docs.google.com/spreadsheets/d/e/2PACX-abcde12345/pub?output=csv)";
+
+// Namma products ellam intha array-la thaan save aagum
+let products = [];
+
+async function loadProductsFromSheet() {
+    try {
+        const response = await fetch(sheetUrl);
+        const csvText = await response.text();
+        
+        // CSV file-a text-la irunthu JavaScript array-a maathurathu
+        const lines = csvText.split('\n');
+        const headers = lines[0].split(',').map(h => h.trim());
+        
+        for (let i = 1; i < lines.length; i++) {
+            if (lines[i].trim() === '') continue;
+            
+            // Description-kulla comma iruntha problem aagama irukka intha regex split use aagum
+            const currentLine = lines[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            let obj = {};
+            
+            headers.forEach((header, index) => {
+                let value = currentLine[index] || '';
+                // Extra quotes iruntha remove pandrathu
+                obj[header] = value.replace(/^"|"$/g, '').trim(); 
+            });
+            
+            products.push(obj);
+        }
+        
+        console.log("Sheet-la irunthu vantha products:", products);
+        
+        // 2. Inga unga UI-a kaattura function-a call pannanum
+        // Unga script.js-la products-a display panna enna function vachirukingalo atha inga podanum.
+        // Example-ku: renderProducts(products); allathu displayItems(products);
+        if (typeof renderProducts === 'function') {
+            renderProducts(products); 
+        }
+        
+    } catch (error) {
+        console.error("Products load aagala boss, error ithuthaan:", error);
+    }
+}
+
+// Function-a start panrom
+loadProductsFromSheet();

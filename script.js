@@ -12,37 +12,49 @@ let query = "";
 
 // --- 3. Security Function (HTML injection thadukka) ---
 function escapeHTML(value) {
+    if (!value) return "";
     return String(value).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
 // --- 4. Main Render Function (Products-a display panna) ---
-function render() {
+// Ippo intha function perai 'renderProducts' nu maathirukkom (products.js kooda link panna)
+function renderProducts(sheetProducts) {
+    // sheetProducts kidaikkalana global 'products' array-va use pannu
+    const dataToRender = sheetProducts || (typeof products !== 'undefined' ? products : []);
+
     // Category matrum Search query vechu products-a filter pandrom
-    const matches = products.filter(p => {
+    const matches = dataToRender.filter(p => {
         const matchesCategory = (activeCategory === "All" || p.category === activeCategory);
         const matchesSearch = (`${p.name} ${p.category} ${p.description}`.toLowerCase().includes(query));
         return matchesCategory && matchesSearch;
     });
 
     // Filter aana products-a HTML-la create panni website-la kaaturom
+    // Emoji-ku pathila real Image tag potturukkom
     grid.innerHTML = matches.map(p => `
         <article class="product-card">
-            <div class="product-art" aria-hidden="true">${p.emoji}</div>
+            <div class="product-art" aria-hidden="true">
+                <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+            </div>
             <div class="product-info">
                 <h3>${escapeHTML(p.name)}</h3>
                 <p>${escapeHTML(p.description)}</p>
-                <span class="price">₹${p.price.toLocaleString("en-IN")}</span>
-                <span class="demo-tag">DEMO PRICE</span>
-                <a href="#" data-product="${p.id}" class="product-link">Affiliate link coming soon ↗</a>
+                <span class="price">₹${Number(p.price).toLocaleString("en-IN")}</span>
+                <a href="${escapeHTML(p.link)}" target="_blank" class="product-link">Buy on Meesho ↗</a>
             </div>
         </article>
     `).join("");
 
     // Results count update pandrom
-    count.textContent = `${matches.length} demo products`;
+    count.textContent = `${matches.length} products`;
     
     // Products illana 'Empty State' message kaaturom
     empty.classList.toggle("hidden", matches.length !== 0);
+}
+
+// Global render function for search/category clicks
+function render() {
+    renderProducts(typeof products !== 'undefined' ? products : []);
 }
 
 // --- 5. Actions & Events (Click, Type pannum pothu enna nadakanum) ---
@@ -97,27 +109,29 @@ document.getElementById("assistantForm").addEventListener("submit", e => {
     // Budget match aana athuketha maari filter pandrom
     if (budgetMatch) {
         const max = Number(budgetMatch[1]);
-        const filtered = products.filter(p => (activeCategory === "All" || p.category === activeCategory) && p.price <= max);
+        const dataToFilter = typeof products !== 'undefined' ? products : [];
+        const filtered = dataToFilter.filter(p => (activeCategory === "All" || p.category === activeCategory) && Number(p.price) <= max);
         
         grid.innerHTML = filtered.map(p => `
             <article class="product-card">
-                <div class="product-art">${p.emoji}</div>
+                <div class="product-art">
+                    <img src="${escapeHTML(p.image)}" alt="${escapeHTML(p.name)}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
                 <div class="product-info">
                     <h3>${escapeHTML(p.name)}</h3>
                     <p>${escapeHTML(p.description)}</p>
-                    <span class="price">₹${p.price.toLocaleString("en-IN")}</span>
-                    <span class="demo-tag">DEMO PRICE</span>
-                    <a href="#">Affiliate link coming soon ↗</a>
+                    <span class="price">₹${Number(p.price).toLocaleString("en-IN")}</span>
+                    <a href="${escapeHTML(p.link)}" target="_blank">Buy on Meesho ↗</a>
                 </div>
             </article>
         `).join("");
         
-        count.textContent = `${filtered.length} demo matches`;
+        count.textContent = `${filtered.length} matches`;
         empty.classList.toggle("hidden", filtered.length !== 0);
-        document.getElementById("assistantMessage").textContent = `Demo filter: showing catalogue items at or below ₹${max}. This is not an AI-powered recommendation yet.`;
+        document.getElementById("assistantMessage").textContent = `Filter: showing items at or below ₹${max}.`;
     } else {
         render();
-        document.getElementById("assistantMessage").textContent = "Demo assistant: try a request such as “kitchen products under ₹500”. Category and budget matching are basic rules, not AI."; 
+        document.getElementById("assistantMessage").textContent = "Assistant: try a request such as “kitchen products under 500”."; 
     }
 
     // Products section-ku keezha scroll pandrom
@@ -125,14 +139,11 @@ document.getElementById("assistantForm").addEventListener("submit", e => {
 });
 
 // --- 6. Dark Theme Toggle Logic ---
-
-// Browser-la already save aagiruka theme-a load panna
 if (localStorage.getItem('theme') === 'dark') {
     body.classList.add('dark-theme');
     themeToggle.textContent = '☀️';
 }
 
-// Button click pannum pothu light/dark switch aaga
 themeToggle.addEventListener('click', () => {
     body.classList.toggle('dark-theme');
     
@@ -145,6 +156,5 @@ themeToggle.addEventListener('click', () => {
     }
 });
 
-// --- 7. Final Setup (Page load aagum pothu run aaganum) ---
-document.getElementById("year").textContent = new Date().getFullYear(); // Footer-la year podurathuku
-render(); // First time products-a display panna
+// --- 7. Final Setup ---
+document.getElementById("year").textContent = new Date().getFullYear();
