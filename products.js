@@ -1,7 +1,7 @@
 // products.js
 
 // 1. Inga unga Google Sheet CSV link-a paste pannunga
-const sheetUrl = "[https://docs.google.com/spreadsheets/d/e/2PACX-abcde12345/pub?output=csv](https://docs.google.com/spreadsheets/d/e/2PACX-abcde12345/pub?output=csv)";
+const sheetUrl = "[https://docs.google.com/spreadsheets/d/e/2PACX-1vThmDvmzfUgAoXHEW6DGdKZcJG0Zw9kRU8cTc9l_PfXiJfQUmeDmc4paYjW9GZisyXLQAgNXJvTmX2_/pub?output=csv)";
 
 // Namma products ellam intha array-la thaan save aagum
 let products = [];
